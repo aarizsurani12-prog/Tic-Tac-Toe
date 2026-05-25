@@ -1,0 +1,522 @@
+/* ===== CSS Custom Properties (themes) ===== */
+
+:root {
+  --bg:           #07071a;
+  --board-bg:     #0d0d28;
+  --cell-bg:      #070718;
+  --cell-hover:   #0f0f26;
+  --border:       #1a1a42;
+  --text:         #e2e8f0;
+  --text-muted:   #475569;
+  --text-dim:     #64748b;
+  --x-color:      #a78bfa;
+  --o-color:      #2dd4bf;
+  --primary:      #7c3aed;
+  --primary-hover:#6d28d9;
+  --orb1:         rgba(124,58,237,0.22);
+  --orb2:         rgba(20,184,166,0.15);
+  --x-win-line:   rgba(167,139,250,0.92);
+  --o-win-line:   rgba(45,212,191,0.92);
+  --x-win-cell:   #130e38;
+  --o-win-cell:   #092928;
+  --score-bump:   #a78bfa;
+  --glow-base:    rgba(0,0,0,0.5);
+  --glow-player:  rgba(167,139,250,0.22);
+  --glow-bot:     rgba(45,212,191,0.20);
+  --glow-win:     rgba(74,222,128,0.38);
+  --glow-lose:    rgba(251,113,133,0.30);
+  --glow-draw:    rgba(251,191,36,0.25);
+}
+
+[data-theme="light"] {
+  --bg:           #f0f0ff;
+  --board-bg:     #e4e4f8;
+  --cell-bg:      #f5f5ff;
+  --cell-hover:   #ebebff;
+  --border:       #c4bef0;
+  --text:         #1e1b4b;
+  --text-muted:   #5b4f8a;
+  --text-dim:     #6d60a8;
+  --x-color:      #6d28d9;
+  --o-color:      #0f766e;
+  --primary:      #7c3aed;
+  --primary-hover:#6d28d9;
+  --orb1:         rgba(124,58,237,0.10);
+  --orb2:         rgba(13,148,136,0.08);
+  --x-win-line:   rgba(109,40,217,0.88);
+  --o-win-line:   rgba(15,118,110,0.88);
+  --x-win-cell:   #ede9ff;
+  --o-win-cell:   #ccfbf1;
+  --score-bump:   #7c3aed;
+  --glow-base:    rgba(0,0,0,0.12);
+  --glow-player:  rgba(109,40,217,0.15);
+  --glow-bot:     rgba(15,118,110,0.12);
+  --glow-win:     rgba(22,163,74,0.22);
+  --glow-lose:    rgba(220,38,38,0.18);
+  --glow-draw:    rgba(202,138,4,0.2);
+}
+
+[data-theme="neon"] {
+  --bg:           #000008;
+  --board-bg:     #04041a;
+  --cell-bg:      #020210;
+  --cell-hover:   #08082a;
+  --border:       #3300aa;
+  --text:         #e0e0ff;
+  --text-muted:   #6644cc;
+  --text-dim:     #5533bb;
+  --x-color:      #cc00ff;
+  --o-color:      #00ffee;
+  --primary:      #9900ff;
+  --primary-hover:#8800ee;
+  --orb1:         rgba(204,0,255,0.28);
+  --orb2:         rgba(0,255,238,0.20);
+  --x-win-line:   rgba(204,0,255,0.95);
+  --o-win-line:   rgba(0,255,238,0.95);
+  --x-win-cell:   #1a002a;
+  --o-win-cell:   #001a18;
+  --score-bump:   #cc00ff;
+  --glow-base:    rgba(0,0,0,0.7);
+  --glow-player:  rgba(204,0,255,0.32);
+  --glow-bot:     rgba(0,255,238,0.28);
+  --glow-win:     rgba(0,255,100,0.42);
+  --glow-lose:    rgba(255,50,50,0.38);
+  --glow-draw:    rgba(255,200,0,0.32);
+}
+
+/* ===== Base ===== */
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg);
+  font-family: 'Segoe UI', system-ui, sans-serif;
+  color: var(--text);
+  overflow: hidden;
+  transition: background 0.4s ease, color 0.4s ease;
+}
+
+/* Floating orbs */
+body::before, body::after {
+  content: '';
+  position: fixed;
+  border-radius: 50%;
+  filter: blur(90px);
+  pointer-events: none;
+  z-index: 0;
+}
+
+body::before {
+  width: 600px; height: 500px;
+  background: var(--orb1);
+  top: -120px; left: -160px;
+  animation: orbFloat1 16s ease-in-out infinite alternate;
+}
+
+body::after {
+  width: 500px; height: 600px;
+  background: var(--orb2);
+  bottom: -160px; right: -120px;
+  animation: orbFloat2 20s ease-in-out infinite alternate;
+}
+
+@keyframes orbFloat1 {
+  0%   { transform: translate(0,0) scale(1); }
+  100% { transform: translate(70px,90px) scale(1.18); }
+}
+@keyframes orbFloat2 {
+  0%   { transform: translate(0,0) scale(1); }
+  100% { transform: translate(-70px,-55px) scale(1.12); }
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+  padding: 32px 24px;
+  position: relative;
+  z-index: 1;
+}
+
+/* ===== Title ===== */
+
+.title {
+  font-size: 2rem;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+  background: linear-gradient(135deg, var(--x-color) 0%, var(--o-color) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  transition: background 0.4s;
+}
+
+/* ===== Controls ===== */
+
+.controls {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.mode-toggle {
+  display: flex;
+  background: var(--board-bg);
+  border-radius: 10px;
+  padding: 3px;
+  gap: 3px;
+  border: 1px solid var(--border);
+}
+
+.mode-btn {
+  padding: 6px 16px;
+  border: none;
+  border-radius: 7px;
+  background: transparent;
+  color: var(--text-dim);
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s, transform 0.1s;
+}
+
+.mode-btn.active { background: var(--primary); color: #fff; }
+.mode-btn:not(.active):hover { color: var(--x-color); }
+.mode-btn:active { transform: scale(0.96); }
+
+.diff-wrap select {
+  background: var(--board-bg);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 6px 10px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  outline: none;
+  transition: border-color 0.2s, background 0.4s;
+}
+
+.diff-wrap select:hover { border-color: var(--primary); }
+.diff-wrap select:disabled { opacity: 0.4; cursor: not-allowed; }
+
+.theme-btn, .mute-btn {
+  background: var(--board-bg);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 5px 9px;
+  font-size: 1rem;
+  cursor: pointer;
+  line-height: 1;
+  color: var(--text);
+  transition: border-color 0.2s, transform 0.1s, background 0.4s;
+}
+
+.theme-btn:hover, .mute-btn:hover { border-color: var(--primary); transform: scale(1.1); }
+.theme-btn:active, .mute-btn:active { transform: scale(0.95); }
+
+/* ===== Status ===== */
+
+.status {
+  font-size: 1.1rem;
+  font-weight: 500;
+  color: var(--text-dim);
+  min-height: 1.5rem;
+  transition: color 0.3s;
+}
+
+.status.player-win { color: #4ade80; }
+.status.p2-win     { color: var(--o-color); }
+.status.bot-win    { color: #fb7185; }
+.status.draw       { color: #fbbf24; }
+.status.thinking   { color: var(--x-color); }
+
+/* ===== Board ===== */
+
+.board {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  padding: 8px;
+  background: var(--board-bg);
+  border-radius: 16px;
+  box-shadow: 0 8px 32px var(--glow-base);
+  position: relative;
+  transition: box-shadow 0.6s ease, background 0.4s ease;
+}
+
+/* Neon: board border */
+[data-theme="neon"] .board { border: 1px solid var(--border); }
+
+/* Board glow states */
+.board.state-player { box-shadow: 0 8px 32px var(--glow-base), 0 0 44px var(--glow-player); }
+.board.state-bot    { box-shadow: 0 8px 32px var(--glow-base), 0 0 44px var(--glow-bot); }
+.board.state-win    { box-shadow: 0 8px 32px var(--glow-base), 0 0 55px var(--glow-win); }
+.board.state-lose   { box-shadow: 0 8px 32px var(--glow-base), 0 0 55px var(--glow-lose); }
+.board.state-draw   { box-shadow: 0 8px 32px var(--glow-base), 0 0 40px var(--glow-draw); }
+
+/* Board shake on draw */
+.board.shake { animation: boardShake 0.52s ease; }
+
+@keyframes boardShake {
+  0%   { transform: translateX(0); }
+  14%  { transform: translateX(-9px) rotate(-0.8deg); }
+  28%  { transform: translateX(9px)  rotate(0.8deg); }
+  42%  { transform: translateX(-6px); }
+  56%  { transform: translateX(6px); }
+  70%  { transform: translateX(-3px); }
+  84%  { transform: translateX(3px); }
+  100% { transform: translateX(0); }
+}
+
+/* ===== Cells ===== */
+
+.cell {
+  width: min(26vw, 110px);
+  height: min(26vw, 110px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+  background: var(--cell-bg);
+  cursor: pointer;
+  user-select: none;
+  transition: background 0.15s, transform 0.12s, opacity 0.35s ease, filter 0.35s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.cell:hover:not(.taken):not(.locked) {
+  background: var(--cell-hover);
+  transform: scale(1.05);
+}
+
+.cell.taken, .cell.locked { cursor: default; pointer-events: none; }
+
+/* Dim non-win cells when a winner exists */
+.board.game-over:not(.draw-result) .cell:not(.win-cell) {
+  opacity: 0.28;
+  filter: saturate(0.12) brightness(0.55);
+  transition: opacity 0.4s 0.25s ease, filter 0.4s 0.25s ease;
+}
+
+/* Gray all cells on draw */
+.board.draw-result .cell {
+  opacity: 0.38;
+  filter: saturate(0.08) brightness(0.5);
+  transition: opacity 0.4s 0.15s ease, filter 0.4s 0.15s ease;
+}
+
+/* Win cells: springy bounce, staggered by animation-delay set in JS */
+.cell.win-cell {
+  animation: winBounce 0.65s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
+.cell.win-cell.mark-x { background: var(--x-win-cell); }
+.cell.win-cell.mark-o { background: var(--o-win-cell); }
+
+@keyframes winBounce {
+  0%   { transform: scale(1); }
+  45%  { transform: scale(1.25); }
+  100% { transform: scale(1); }
+}
+
+/* Neon glow on marks */
+[data-theme="neon"] .cell.mark-x svg { filter: drop-shadow(0 0 8px var(--x-color)); }
+[data-theme="neon"] .cell.mark-o svg { filter: drop-shadow(0 0 8px var(--o-color)); }
+[data-theme="neon"] .cell.win-cell   { filter: drop-shadow(0 0 14px var(--x-color)); }
+[data-theme="neon"] .cell.win-cell.mark-o { filter: drop-shadow(0 0 14px var(--o-color)); }
+
+/* Pop-in: springy elastic placement */
+.cell.pop { animation: pop 0.32s cubic-bezier(0.34, 1.56, 0.64, 1); }
+
+@keyframes pop {
+  0%   { transform: scale(0.35); opacity: 0; }
+  100% { transform: scale(1);    opacity: 1; }
+}
+
+/* Clear animation for board wipe */
+.cell.clearing {
+  animation: cellClear 0.3s cubic-bezier(0.4, 0, 1, 1) both !important;
+  pointer-events: none;
+}
+
+@keyframes cellClear {
+  0%   { transform: scale(1) rotate(0deg); opacity: 1; }
+  100% { transform: scale(0) rotate(90deg); opacity: 0; }
+}
+
+/* ===== SVG markers ===== */
+
+.cell svg { width: 62%; height: 62%; overflow: visible; }
+
+.x-line1, .x-line2 {
+  stroke: var(--x-color);
+  stroke-width: 10;
+  stroke-linecap: round;
+  stroke-dasharray: 86;
+  stroke-dashoffset: 86;
+  fill: none;
+  transition: stroke-dashoffset 0.14s ease, opacity 0.14s, stroke 0.4s;
+}
+
+.o-circle {
+  fill: none;
+  stroke: var(--o-color);
+  stroke-width: 10;
+  stroke-linecap: round;
+  stroke-dasharray: 190;
+  stroke-dashoffset: 190;
+  transform-origin: 50px 50px;
+  rotate: -90deg;
+  transition: stroke-dashoffset 0.14s ease, opacity 0.14s, stroke 0.4s;
+}
+
+/* Draw strokes on placement */
+.cell.mark-x .x-line1 { animation: drawStroke 0.22s ease forwards; }
+.cell.mark-x .x-line2 { animation: drawStroke 0.22s ease 0.1s forwards; }
+.cell.mark-o .o-circle { animation: drawStroke 0.38s ease forwards; }
+
+@keyframes drawStroke { to { stroke-dashoffset: 0; } }
+
+/* Ghost previews on hover */
+.board.player-turn .cell:not(.taken):not(.locked):hover .x-line1,
+.board.player-turn .cell:not(.taken):not(.locked):hover .x-line2 {
+  stroke-dashoffset: 0;
+  opacity: 0.18;
+}
+
+.board.p2-turn .cell:not(.taken):not(.locked):hover .o-circle {
+  stroke-dashoffset: 0;
+  opacity: 0.18;
+}
+
+/* ===== Win line overlay ===== */
+
+.win-line-svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 10;
+}
+
+#winLineEl {
+  fill: none;
+  stroke-width: 6;
+  stroke-linecap: round;
+  stroke-dasharray: 10000;
+  stroke-dashoffset: 10000;
+}
+
+#winLineEl.draw { animation: drawWinLine 0.45s cubic-bezier(0.4,0,0.2,1) forwards; }
+
+@keyframes drawWinLine { to { stroke-dashoffset: 0; } }
+
+/* ===== Confetti ===== */
+
+.confetti-particle {
+  position: fixed;
+  pointer-events: none;
+  z-index: 9999;
+  transform: translate(-50%, -50%);
+}
+
+@keyframes confettiFly {
+  0%   { transform: translate(-50%,-50%) scale(1) rotate(0deg); opacity: 1; }
+  75%  { opacity: 0.85; }
+  100% { transform: translate(calc(-50% + var(--tx)), calc(-50% + var(--ty))) scale(0.08) rotate(var(--rot)); opacity: 0; }
+}
+
+/* ===== Bot thinking dots ===== */
+
+.dot-flashing { display: inline-flex; gap: 4px; margin-left: 4px; vertical-align: middle; }
+
+.dot-flashing span {
+  width: 5px; height: 5px;
+  border-radius: 50%;
+  background: var(--x-color);
+  animation: blink 1.2s infinite;
+}
+
+.dot-flashing span:nth-child(2) { animation-delay: 0.2s; }
+.dot-flashing span:nth-child(3) { animation-delay: 0.4s; }
+
+@keyframes blink {
+  0%, 80%, 100% { opacity: 0.2; }
+  40%           { opacity: 1; }
+}
+
+/* ===== New Game button ===== */
+
+.reset-btn {
+  padding: 10px 32px;
+  background: var(--primary);
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.1s, box-shadow 0.2s;
+}
+
+.reset-btn:hover  { background: var(--primary-hover); transform: translateY(-1px); box-shadow: 0 6px 20px color-mix(in srgb, var(--primary) 50%, transparent); }
+.reset-btn:active { transform: translateY(0); box-shadow: none; }
+
+/* ===== Scoreboard ===== */
+
+.scoreboard { display: flex; gap: 16px; }
+
+.score-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  background: var(--board-bg);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 12px 24px;
+  min-width: 80px;
+  transition: background 0.4s, border-color 0.4s;
+}
+
+.score-item.draws .score-label { color: #fbbf24; }
+.score-label { font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; transition: color 0.4s; }
+.score-value { font-size: 1.6rem; font-weight: 700; color: var(--text); }
+.score-value.bump { animation: scoreBump 0.42s ease; }
+
+@keyframes scoreBump {
+  0%   { transform: scale(1); }
+  40%  { transform: scale(1.55); color: var(--score-bump); }
+  100% { transform: scale(1);   color: var(--text); }
+}
+
+/* Turn indicator dots */
+.turn-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: transparent;
+  transition: background 0.35s ease, box-shadow 0.35s ease, transform 0.35s cubic-bezier(0.34,1.56,0.64,1);
+  transform: scale(0);
+}
+
+#dotPlayer.active {
+  background: var(--x-color);
+  box-shadow: 0 0 10px var(--x-color);
+  transform: scale(1);
+}
+
+#dotBot.active {
+  background: var(--o-color);
+  box-shadow: 0 0 10px var(--o-color);
+  transform: scale(1);
+}

@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tic Tac Toe – Play Free Online vs Bot or Friend</title>
+  <meta name="description" content="Play Tic Tac Toe free online. Challenge the unbeatable AI bot on Easy, Medium, or Hard — or play vs a friend on the same device. No download needed." />
+  <link rel="canonical" href="https://YOUR-NETLIFY-URL.netlify.app/" />
+
+  <meta property="og:type"        content="website" />
+  <meta property="og:title"       content="Tic Tac Toe – Play Free Online" />
+  <meta property="og:description" content="Beat the unbeatable AI or challenge a friend. Three difficulty levels, three themes." />
+  <meta property="og:url"         content="https://YOUR-NETLIFY-URL.netlify.app/" />
+  <meta property="og:image"       content="https://YOUR-NETLIFY-URL.netlify.app/og-image.png" />
+  <meta name="twitter:card"       content="summary_large_image" />
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "Tic Tac Toe",
+    "description": "Free browser Tic Tac Toe game with bot AI and local multiplayer.",
+    "applicationCategory": "GameApplication",
+    "operatingSystem": "Any",
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+    "url": "https://YOUR-NETLIFY-URL.netlify.app/"
+  }
+  </script>
+
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="container">
+    <h1 class="title">Tic Tac Toe</h1>
+
+    <div class="controls">
+      <div class="mode-toggle" id="modeToggle">
+        <button class="mode-btn active" data-mode="bot">vs Bot</button>
+        <button class="mode-btn" data-mode="friend">vs Friend</button>
+      </div>
+      <div class="diff-wrap" id="diffWrap">
+        <select id="difficulty">
+          <option value="easy" selected>Easy</option>
+          <option value="medium">Medium</option>
+          <option value="hard">Hard</option>
+        </select>
+      </div>
+      <button class="theme-btn" id="themeBtn" title="Switch theme">🌙</button>
+      <button class="mute-btn" id="muteBtn" title="Mute">🔊</button>
+    </div>
+
+    <div class="status" id="status">Your turn (X)</div>
+
+    <div class="board state-player player-turn" id="board">
+      <div class="cell" data-index="0"><svg viewBox="0 0 100 100" aria-hidden="true"><line class="x-line1" x1="20" y1="20" x2="80" y2="80"/><line class="x-line2" x1="80" y1="20" x2="20" y2="80"/><circle class="o-circle" cx="50" cy="50" r="30"/></svg></div>
+      <div class="cell" data-index="1"><svg viewBox="0 0 100 100" aria-hidden="true"><line class="x-line1" x1="20" y1="20" x2="80" y2="80"/><line class="x-line2" x1="80" y1="20" x2="20" y2="80"/><circle class="o-circle" cx="50" cy="50" r="30"/></svg></div>
+      <div class="cell" data-index="2"><svg viewBox="0 0 100 100" aria-hidden="true"><line class="x-line1" x1="20" y1="20" x2="80" y2="80"/><line class="x-line2" x1="80" y1="20" x2="20" y2="80"/><circle class="o-circle" cx="50" cy="50" r="30"/></svg></div>
+      <div class="cell" data-index="3"><svg viewBox="0 0 100 100" aria-hidden="true"><line class="x-line1" x1="20" y1="20" x2="80" y2="80"/><line class="x-line2" x1="80" y1="20" x2="20" y2="80"/><circle class="o-circle" cx="50" cy="50" r="30"/></svg></div>
+      <div class="cell" data-index="4"><svg viewBox="0 0 100 100" aria-hidden="true"><line class="x-line1" x1="20" y1="20" x2="80" y2="80"/><line class="x-line2" x1="80" y1="20" x2="20" y2="80"/><circle class="o-circle" cx="50" cy="50" r="30"/></svg></div>
+      <div class="cell" data-index="5"><svg viewBox="0 0 100 100" aria-hidden="true"><line class="x-line1" x1="20" y1="20" x2="80" y2="80"/><line class="x-line2" x1="80" y1="20" x2="20" y2="80"/><circle class="o-circle" cx="50" cy="50" r="30"/></svg></div>
+      <div class="cell" data-index="6"><svg viewBox="0 0 100 100" aria-hidden="true"><line class="x-line1" x1="20" y1="20" x2="80" y2="80"/><line class="x-line2" x1="80" y1="20" x2="20" y2="80"/><circle class="o-circle" cx="50" cy="50" r="30"/></svg></div>
+      <div class="cell" data-index="7"><svg viewBox="0 0 100 100" aria-hidden="true"><line class="x-line1" x1="20" y1="20" x2="80" y2="80"/><line class="x-line2" x1="80" y1="20" x2="20" y2="80"/><circle class="o-circle" cx="50" cy="50" r="30"/></svg></div>
+      <div class="cell" data-index="8"><svg viewBox="0 0 100 100" aria-hidden="true"><line class="x-line1" x1="20" y1="20" x2="80" y2="80"/><line class="x-line2" x1="80" y1="20" x2="20" y2="80"/><circle class="o-circle" cx="50" cy="50" r="30"/></svg></div>
+      <svg class="win-line-svg" id="winLineSvg" xmlns="http://www.w3.org/2000/svg">
+        <line id="winLineEl" stroke-linecap="round"/>
+      </svg>
+    </div>
+
+    <button class="reset-btn" id="resetBtn">New Game</button>
+
+    <div class="scoreboard">
+      <div class="score-item">
+        <span class="score-label" id="labelPlayer">You (X)</span>
+        <span class="score-value" id="scorePlayer">0</span>
+        <div class="turn-dot" id="dotPlayer"></div>
+      </div>
+      <div class="score-item draws">
+        <span class="score-label">Draws</span>
+        <span class="score-value" id="scoreDraw">0</span>
+        <div class="turn-dot"></div>
+      </div>
+      <div class="score-item">
+        <span class="score-label" id="labelBot">Bot (O)</span>
+        <span class="score-value" id="scoreBot">0</span>
+        <div class="turn-dot" id="dotBot"></div>
+      </div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
