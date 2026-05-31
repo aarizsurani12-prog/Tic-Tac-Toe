@@ -174,15 +174,16 @@ function spawnConfetti(winner) {
     const tx       = Math.cos(angle) * dist;
     const ty       = Math.sin(angle) * dist;
 
-    el.style.cssText = `
-      left:${ox}px;top:${oy}px;
-      width:${w}px;height:${h}px;
-      background:${color};
-      border-radius:${br};
-      --tx:${tx}px;--ty:${ty}px;
-      --rot:${Math.random()*720-360}deg;
-      animation:confettiFly ${dur}s ease-out ${delay}s both;
-    `;
+    el.style.left         = `${ox}px`;
+    el.style.top          = `${oy}px`;
+    el.style.width        = `${w}px`;
+    el.style.height       = `${h}px`;
+    el.style.background   = color;
+    el.style.borderRadius = br;
+    el.style.setProperty('--tx',  `${tx}px`);
+    el.style.setProperty('--ty',  `${ty}px`);
+    el.style.setProperty('--rot', `${Math.random()*720-360}deg`);
+    el.style.animation    = `confettiFly ${dur}s ease-out ${delay}s both`;
     document.body.appendChild(el);
     setTimeout(() => el.remove(), (dur + delay + 0.25) * 1000);
   }

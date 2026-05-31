@@ -379,11 +379,12 @@ body::after {
 }
 
 /* Draw strokes on placement */
-.cell.mark-x .x-line1 { animation: drawStroke 0.22s ease forwards; }
-.cell.mark-x .x-line2 { animation: drawStroke 0.22s ease 0.1s forwards; }
-.cell.mark-o .o-circle { animation: drawStroke 0.38s ease forwards; }
+.cell.mark-x .x-line1 { animation: drawStrokeX 0.22s ease forwards; }
+.cell.mark-x .x-line2 { animation: drawStrokeX 0.22s ease 0.1s forwards; }
+.cell.mark-o .o-circle { animation: drawStrokeO 0.38s ease forwards; }
 
-@keyframes drawStroke { to { stroke-dashoffset: 0; } }
+@keyframes drawStrokeX { from { stroke-dashoffset: 86;  } to { stroke-dashoffset: 0; } }
+@keyframes drawStrokeO { from { stroke-dashoffset: 190; } to { stroke-dashoffset: 0; } }
 
 /* Ghost previews on hover */
 .board.player-turn .cell:not(.taken):not(.locked):hover .x-line1,
